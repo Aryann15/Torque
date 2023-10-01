@@ -12,6 +12,18 @@ def parse_csv():
       csv_file.save('uploaded.csv')
       return 'CSV uploaded'
 
+@app.route('/answer', methods=['POST']) 
+def answer():    
+      csv_file = request.files['csv']
+      csv_file.save('uploaded.csv')    
+      question = request.json['question']
+
+      llm = OpenAI(temperature=0) 
+      agent = create_csv_agents(llm, 'uploaded.csv', verbose=True)
+
+      response = agent.run(question)
+
+      return response
 
 
 load_dotenv()
