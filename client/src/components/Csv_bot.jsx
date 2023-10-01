@@ -15,7 +15,22 @@ const Csvbot = () => {
   const [userQuestion, setUserQuestion] = useState(null)
   const [answer, setAnswer] = useState(null);
 
+  const getAnswer = async () => {
+    try {
+      const response = await fetch(`/csvbot?userCsv=${userCsv}&userQuestion=${userQuestion}`);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.text();
+      setAnswer(data);
+    } catch (error) {
+      console.error(error);
+      // Handle the error appropriately (e.g., show an error message to the user).
+    }
+  };
 
+
+  
   function handleFileUpload(event) {
     setUserCsv(event.target.files[0]);
   }
