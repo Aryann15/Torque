@@ -5,27 +5,35 @@ import { Button } from "@mui/material";
 import Container from "@mui/material/Container";
 import { useState } from "react";
 import TextField from "@mui/material/TextField";
-import create_csv_agent from "langchain/agents"
-import OpenAI from "langchain/llms";
-
 
 
 const Csvbot = () => {
+
+
   const [userCsv, setUserCsv] = useState(null);
   const [userQuestion, setUserQuestion] = useState(null)
-  const [agent, setAgent] = useState(null);
+  const [answer, setAnswer] = useState(null);
 
 
   function handleFileUpload(event) {
     setUserCsv(event.target.files[0]);
-    const openAI = new OpenAI({ temperature: 0 });
-    const agentType = AgentType.ZERO_SHOT_REACT_DESCRIPTION;
-    const newAgent = create_csv_agent(openAI, userCsv, true, agentType);
-    setAgent (newAgent)
   }
   function handleQuestionUpload(event) {
     setUserQuestion(event.target.value);
   }
+
+  const getAnswer = async =() =>{
+    try{
+      const {data} = axios.post("/answer",{
+        userCsv,userQuestion
+      });
+      setAnswer(data);
+    }catch(err){
+      console.log(err);
+    }
+  }
+
+
   return (
     <Container>
       <Typography variant="h3" align="center" gutterBottom>
@@ -56,6 +64,11 @@ const Csvbot = () => {
                 variant="outlined"
                 onChange={handleQuestionUpload}
               />
+
+              <Button onClick={pythonExec}>
+                click me
+              </Button>
+
               {console.log(userQuestion)}
             </div>
           ) : (
