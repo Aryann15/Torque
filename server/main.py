@@ -1,14 +1,25 @@
-from langchain.agents import create_csv_agent
-from langchain.llms import OpenAI
-from dotenv import load_dotenv
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
-def main(userCsv , userQuestion ):
-    load_dotenv()
-    llm = OpenAI(temperature=0)
-    agent = create_csv_agent(llm,userCsv, verbose=True)
-    response = agent.run(userQuestion)
-    return response;
+app = Flask(__name__)
+CORS(app)
+
+@app.route('/upload', methods=['POST'])
+def upload_csv_and_question():
+    user_csv = request.files['userCsv']
+    user_question = request.form['userQuestion']
     
+    if user_csv and user_question:
+        # Print the CSV file information
+        print(f'CSV File Name: {user_csv.filename}')
+        print(f'User Question: {user_question}')
 
-if __name__ == "__main__":
-    main()
+        # You can process the CSV file or perform other actions here
+
+        return user_csv.filename
+    
+    else:
+        return 'Error: Missing CSV file or user question data!'
+
+if __name__ == '__main__':
+    app.run(debug=True)
