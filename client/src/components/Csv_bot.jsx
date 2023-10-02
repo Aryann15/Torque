@@ -13,21 +13,7 @@ const Csvbot = () => {
 
   const [userCsv, setUserCsv] = useState(null);
   const [userQuestion, setUserQuestion] = useState(null)
-  const [answer, setAnswer] = useState(null);
 
-  const getAnswer = async () => {
-    try {
-      const response = await fetch(`/csvbot?userCsv=${userCsv}&userQuestion=${userQuestion}`);
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const data = await response.text();
-      setAnswer(data);
-    } catch (error) {
-      console.error(error);
-      // Handle the error appropriately (e.g., show an error message to the user).
-    }
-  };
 
 
   
@@ -38,6 +24,27 @@ const Csvbot = () => {
     setUserQuestion(event.target.value);
   }
 
+  async function handleGetAnswer() {
+    const formData = new FormData();
+    formData.append("userCsv", userCsv);
+    formData.append("userQuestion", userQuestion);
+
+    try {
+      const response = await fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        const result = await response.text();
+        alert(result); // Show a success message
+      } else {
+        alert("Error: Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
 
   return (
     <Container>
@@ -70,10 +77,10 @@ const Csvbot = () => {
                 onChange={handleQuestionUpload}
               />
 
-              <Button onClick={getAnswer}>
+              <Button onClick={handleGetAnswer}>
                 get answer
               </Button>
-              <Typography>{answer}</Typography>
+              {/* <Typography>{answer}</Typography> */}
               {/* {console.log(userQuestion)} */}
             </div>
           ) : (
