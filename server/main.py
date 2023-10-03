@@ -33,7 +33,8 @@ def upload_csv_and_question():
         agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
     )
 
-       
+        result = agent.run(user_question)
+        return result
 
     else:
         return "Error: Missing CSV file or user question data!"
