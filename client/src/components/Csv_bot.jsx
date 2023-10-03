@@ -37,7 +37,7 @@ const Csvbot = () => {
 
       if (response.ok) {
         const result = await response.text();
-        alert(result); // Show a success message
+        console.log(result);; // Show a success message
       } else {
         alert("Error: Something went wrong");
       }
