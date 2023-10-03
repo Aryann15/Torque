@@ -25,10 +25,14 @@ def upload_csv_and_question():
         print(f"CSV File Name: {user_csv.filename}")
         print(f"User Question: {user_question}")
 
-        
+        csv_filename = secure_filename(user_csv.filename)
+        user_csv.save(csv_filename)
+
+        csv_path = f"./{csv_filename}"
+    
         agent = create_csv_agent(
         OpenAI(temperature=0),
-        user_csv,
+        csv_path,
         verbose=True,
         agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
     )
